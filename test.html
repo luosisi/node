@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body,div,p{
+			margin: 0;
+			padding: 0;
+		}
+		.layout{
+			margin-top: 50px;
+		}
+		.layout,.left,.center,.right{
+			height: 100px;
+		}
+		.left{
+			background: blue;
+			width: 300px;
+		}
+		.center{
+			background: red;
+			color: #fff;
+		}
+		.right{
+			background: yellow;
+			width: 300px;
+		}
+		.float_layout .left{
+			float: left;
+		}
+		.float_layout .right{
+			float: right;
+		}
+		.position_layout div{
+			position: absolute;
+		}
+		.position_layout .left{
+			left: 0;
+		}
+		.position_layout .center{
+			left: 300px;
+			right: 300px;
+		}
+		.position_layout .right{
+			right: 0;
+		}
+		.flex_layout{
+			display: flex;
+		}
+		.flex_layout .center{
+			flex: 1;
+		}
+		.table_layout{
+			width: 100%;
+			display: table;
+		}
+		.table_layout div{
+			display: table-cell;
+		}
+		.grid_layout{
+			display: grid;
+			width: 100%;
+			grid-template-rows: 100px;
+			grid-template-columns: 300px auto 300px;
+		}
+		.grid_left{
+			background: blue;
+		}
+		.grid_center{
+			background: red;
+			color: #fff;
+		}
+		.grid_right{
+			background: yellow;
+		}
+		.list_box{
+			display: list-item;
+		}
+		#box{
+		    background-color: lightgrey;
+		    width: 300px;
+		    border: 10px solid green;
+		    padding: 10px;
+		    margin: 10px;
+		    height:100px;
+		    overflow: auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<section class="layout float_layout">
+		<div class="left"></div>
+		<div class="right"></div>
+		<div class="center">
+			浮动布局左右宽度固定，中间自适应
+		</div>
+	</section>
+	<section class="layout position_layout">
+		<div class="left"></div>
+		<div class="center">
+			定位布局左右宽度固定，中间自适应
+		</div>
+		<div class="right"></div>
+	</section>
+	<section class="layout flex_layout">
+		<div class="left"></div>
+		<div class="center">
+			flex布局左右宽度固定，中间自适应
+		</div>
+		<div class="right"></div>
+	</section>
+	<section class="layout table_layout">
+		<div class="left"></div>
+		<div class="center">
+			表格布局左右宽度固定，中间自适应
+		</div>
+		<div class="right"></div>
+	</section>
+	<section class="layout grid_layout">
+		<div class="grid_left"></div>
+		<div class="grid_center">
+			grid布局左右宽度固定，中间自适应
+		</div>
+		<div class="grid_right"></div>
+	</section>
+	<script type="text/javascript">
+		
+	//获取盒子的内容高度，内容高度也可用用box.clientHeight获取，内容高度不包括边框和外边距和滚动条
+	var box = document.getElementById("box")
+	//console.log(`offsetTop:${box.style.height}`) //输出内联样式上的高度
+	var contentHeight = window.getComputedStyle(box).height //输出 '100px',是浏览器渲染之后的高
+	console.log(`元素实际高度contentHeight:${contentHeight}`)
+	//var IEcontentHeight = box.currentStyle.height//输出 '100px',是浏览器渲染之后的高,不过只是ie支持
+	//console.log(`IE的元素实际高度IEcontentHeight:${IEcontentHeight}`)
+
+	console.log(`视窗绝对位置的高getBoundingClientReat height : ${box.getBoundingClientRect().height}`)//输出视窗绝对位置的高,还有宽，left，right
+	console.log(`视窗绝对位置的做边距getBoundingClientReat left : ${box.getBoundingClientRect().left}`)//输出视窗绝对位置的高,还有宽，left，right
+
+	//获取盒子客户端的高度
+	console.log(`内容的实际高度clientHeight:${box.clientHeight}`) //输出120 (内容高度+padding * 2) 表示内容的实际高度,包括padding
+	console.log(`元素的实际高度offsetHeight:${box.offsetHeight}`) //输出140 表示元素的实际高度，包括内容的实际高度+边框的高度,可用尺子量的。
+	console.log(`scrollHeight:${box.scrollHeight}`) // 为子元素的实际高度加margin，也就是子元素的offsetHeight + margin*2。如果该元素没有产生滚动条，即其子元素的高度少于该元素的高度，则scrollHeight等于该元素的clientHeight
+
+	//如果box的父容器没有设置定位，则box.offsetLeft是相对body而言，否则是根据离它最近且有设置定位的父容器而言
+	console.log(`相对它的父容器水平的偏移offsetLeft:${box.offsetLeft}`) //获取box盒子相对它的父容器水平的偏移
+	console.log(`相对它的父容器垂直的偏移offsetTop:${box.offsetTop}`) //获取box盒子相对它的父容器垂直的偏移
+	let p={name:'p4'}
+
+	let M=function(name){this.name=name}
+
+	function Parent1(){
+		this.name='Parent1'
+	}
+	function Child1(){
+		Parent1.call(this) //apply
+		this.childType='Child1'
+	}
+
+	function Parent2(){
+		this.name='Parent2'
+		this.arr=['1','2','3']
+	}
+	function Child2(){
+		this.childType='Child2'
+	}
+	Child2.prototype=new Parent2();
+	let b1=new Child2
+	let b2=new Child2
+	b1.arr.push(4)
+	function Parent3(){
+	this.name='Parent3'
+
+	this.arr=[1,2,3]
+	}
+	function Child3(){
+
+	Parent3.call(this)
+	this.childType='Child3'
+	}
+	// Parent3.prototype.say=function(){
+	// 	console.log('hello')
+	// }
+	Child3.prototype=Parent3.prototype
+	let c1=new Child3
+	let c2=new Child3
+	c1.arr.push(4)
+
+
+
+	function Parent4(){
+	this.name='Parent4'
+
+	this.arr=[1,2,3]
+	}
+	function Child4(){
+
+	Parent4.call(this)
+	this.childType='Child4'
+	}
+
+	Child4.prototype=Object.create(Parent4.prototype)
+	Child4.prototype.constructor=Child4
+
+
+	function ajax(){ 
+  console.log(arguments)
+  var ajaxData = { 
+    type:arguments[0].type || "GET", 
+    url:arguments[0].url || "", 
+    async:arguments[0].async || "true", 
+    data:arguments[0].data || null, 
+    dataType:arguments[0].dataType || "text", 
+    contentType:arguments[0].contentType || "application/x-www-form-urlencoded", 
+    beforeSend:arguments[0].beforeSend || function(){}, 
+    success:arguments[0].success || function(){}, 
+    error:arguments[0].error || function(){} 
+  } 
+  ajaxData.beforeSend() 
+  var xhr = createxmlHttpRequest();  
+  xhr.responseType=ajaxData.dataType; 
+  xhr.open(ajaxData.type,ajaxData.url,ajaxData.async);  
+  xhr.setRequestHeader("Content-Type",ajaxData.contentType);  
+  xhr.send(convertData(ajaxData.data));  
+  xhr.onreadystatechange = function() {  
+    if (xhr.readyState == 4) {  
+      if(xhr.status == 200){ 
+        ajaxData.success(xhr.response) 
+      }else{ 
+        ajaxData.error() 
+      }  
+    } 
+  }  
+} 
+  
+function createxmlHttpRequest() {  
+  if (window.ActiveXObject) {  
+    return new ActiveXObject("Microsoft.XMLHTTP");  
+  } else if (window.XMLHttpRequest) {  
+    return new XMLHttpRequest();  
+  }  
+} 
+  
+function convertData(data){ 
+  if( typeof data === 'object' ){ 
+    var convertResult = "" ;  
+    for(var c in data){  
+      convertResult+= c + "=" + data[c] + "&";  
+    }  
+    convertResult=convertResult.substring(0,convertResult.length-1) 
+    return convertResult; 
+  }else{ 
+    return data; 
+  } 
+}
+
+ajax({ 
+  type:"POST", 
+  url:"ajax.php", 
+  dataType:"json", 
+  data:{"val1":"abc","val2":123,"val3":"456"}, 
+  beforeSend:function(){ 
+    //some js code 
+  }, 
+  success:function(msg){ 
+    console.log(msg) 
+  }, 
+  error:function(){ 
+    console.log("error") 
+  } 
+})
+	</script>
+</body>
+</html>
